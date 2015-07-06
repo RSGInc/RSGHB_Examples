@@ -15,7 +15,7 @@ library(RSGHB)
 
 # assumes that respondents are identified with a ID column
 # also assumes that the data is sorted by respondent then experiment
-choicedata <- read.table("simulated_choicedata_wtpspace.csv", sep = ",", header = TRUE)
+choicedata <- read.table("mnl_wtpspace_simulated.csv", sep = ",", header = TRUE)
 
 # Specify any variables here that you'd like to use in the
 # utility equations in the likelihood function below
