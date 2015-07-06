@@ -56,7 +56,7 @@ gDIST <- c(1, 1, 1)
 
 # STARTING VALUES
 svN <- c(0, 0, 0)   # for the random coefficients
-# The selection of the mean here is important when working with non-normal distributions
+                    # The selection of the mean here is important when working with non-normal distributions
 
 # ITERATION SETTINGS
 gNCREP    <- 5000   # Number of iterations to use prior to convergence
