@@ -1,9 +1,9 @@
-# ------------------
+# ------------------------------------------------------------
 # Code for a Multinomial Logit Model with Fixed Coefficients
 # 
 # Jeff Dumont & Jeff Keller
 #
-# ------------------
+# ------------------------------------------------------------
 
 library(RSGHB)
 

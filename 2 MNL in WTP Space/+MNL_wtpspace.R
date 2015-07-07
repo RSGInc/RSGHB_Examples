@@ -1,9 +1,9 @@
-# ------------------
+# -------------------------------------------------
 # Code for a Multinomial Logit Model in WTP-space
 # 
 # Jeff Dumont & Jeff Keller
 #
-# ------------------
+# -------------------------------------------------
 
 library(RSGHB)
 
