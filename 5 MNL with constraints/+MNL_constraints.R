@@ -101,7 +101,7 @@ svN <- rep(0, length(gVarNamesNormal)) # for the random coefficients
 gNCREP    <- 5000  # Number of iterations to use prior to convergence
 gNEREP    <- 5000  # Number of iterations to keep for averaging after convergence has been reached
 gNSKIP    <- 1		 # Number of iterations to do in between retaining draws for averaging
-gINFOSKIP <- 250   # How frequently to print info about the iteration process
+gINFOSKIP <- 100   # How frequently to print info about the iteration process
 
 # CONTROL LIST TO PASS TO doHB
 control <- list(
