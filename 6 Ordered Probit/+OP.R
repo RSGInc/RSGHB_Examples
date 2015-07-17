@@ -43,10 +43,10 @@ modelname <- "Ordered_Probit"		# used for output
 # Names for the random variables
 gVarNamesNormal <- c("Bx", "By")
 
-# Names for the random variables
+# Names for the fixed variables
 gVarNamesFixed <- c("threshold1", "threshold2")
 
-# For each variable, specify the distribution for its coefficient
+# For each random variable, specify the distribution for its coefficient
 # The options are:
 # 1. normal
 # 2. log-nomal
