@@ -46,12 +46,10 @@ Choice3 <- ( choice == 3 )
 modelname <- "Latent_Class"	# used for output
 
 # Names for the Fixed Variables
-gVarNamesFixed <- c("BBrand_2_class1", "BBrand_3_class1", "Bfeature_class1", "Bprice*scale_class1", "Bnone_class1",
-                    "BBrand_2_class2", "BBrand_3_class2", "Bfeature_class2", "Bprice*scale_class2", "Bnone_class2", "delta2")
-
+gVarNamesFixed <- c("delta2","BBrand_2_class1", "BBrand_3_class1", "Bfeature_class1", "Bprice_class1", "Bnone_class1",
+                             "BBrand_2_class2", "BBrand_3_class2", "Bfeature_class2", "Bprice_class2", "Bnone_class2")
 # STARTING VALUES
-FC <- rep(0, length(gVarNamesFixed))  # for the fixed coefficients
-# The selection of the mean here is important when working with non-normal distributions
+FC <- c(1,1,-2,-0.5,-0.5,-3.5,-1,-2,0.5,-1,-3.5) # for the fixed coefficients
 
 # ITERATION SETTINGS
 gNCREP    <- 5000  # Number of iterations to use prior to convergence
@@ -73,45 +71,45 @@ control <- list(
 
 likelihood <- function(fc,b) {
      
+     #Random Coefficients 
      cc <- 1 
+     delta2              <- fc[cc]; cc <- cc + 1
      BBrand_2_class1     <- fc[cc]; cc <- cc + 1
      BBrand_3_class1     <- fc[cc]; cc <- cc + 1
      Bfeature_class1     <- fc[cc]; cc <- cc + 1
-     Bprice_scale_class1 <- fc[cc]; cc <- cc + 1
+     Bprice_class1       <- fc[cc]; cc <- cc + 1
      Bnone_class1        <- fc[cc]; cc <- cc + 1
 
      BBrand_2_class2     <- fc[cc]; cc <- cc + 1
      BBrand_3_class2     <- fc[cc]; cc <- cc + 1
      Bfeature_class2     <- fc[cc]; cc <- cc + 1
-     Bprice_scale_class2 <- fc[cc]; cc <- cc + 1
+     Bprice_class2       <- fc[cc]; cc <- cc + 1
      Bnone_class2        <- fc[cc]; cc <- cc + 1
      
-     delta2 <- fc[cc]; cc <- cc + 1
-          
      # Alternative utilities for Class 1
-     V1.class1 <- Bprice_scale_class1 * ( BBrand_2_class1 * brand_alt1_level2 + BBrand_3_class1 * brand_alt1_level3 + Bfeature_class1 * feature_alt1 + price_alt1 )
-     V2.class1 <- Bprice_scale_class1 * ( BBrand_2_class1 * brand_alt2_level2 + BBrand_3_class1 * brand_alt2_level3 + Bfeature_class1 * feature_alt2 + price_alt2 )
-     V3.class1 <- Bprice_scale_class1 * Bnone_class1 
+     V1.class1 <- BBrand_2_class1 * brand_alt1_level2 + BBrand_3_class1 * brand_alt1_level3 + Bfeature_class1 * feature_alt1 + Bprice_class1 * price_alt1 
+     V2.class1 <- BBrand_2_class1 * brand_alt2_level2 + BBrand_3_class1 * brand_alt2_level3 + Bfeature_class1 * feature_alt2 + Bprice_class1 * price_alt2 
+     V3.class1 <- Bnone_class1 
      
      # Alternative utilities for Class 2
-     V1.class2 <- Bprice_scale_class2 * ( BBrand_2_class2 * brand_alt1_level2 + BBrand_3_class2 * brand_alt1_level3 + Bfeature_class2 * feature_alt1 + price_alt1 )
-     V2.class2 <- Bprice_scale_class2 * ( BBrand_2_class2 * brand_alt2_level2 + BBrand_3_class2 * brand_alt2_level3 + Bfeature_class2 * feature_alt2 + price_alt2 )
-     V3.class2 <- Bprice_scale_class2 * Bnone_class2 
+     V1.class2 <- BBrand_2_class2 * brand_alt1_level2 + BBrand_3_class2 * brand_alt1_level3 + Bfeature_class2 * feature_alt1 + Bprice_class2 * price_alt1
+     V2.class2 <- BBrand_2_class2 * brand_alt2_level2 + BBrand_3_class2 * brand_alt2_level3 + Bfeature_class2 * feature_alt2 + Bprice_class2 * price_alt2
+     V3.class2 <- Bnone_class2 
      
      # Choice probabilities given class
      P.class1 <- ( Choice1 * exp(V1.class1) + Choice2 * exp(V2.class1) + Choice3 * exp(V3.class1) ) / ( exp(V1.class1) + exp(V2.class1) + exp(V3.class1) )
      P.class2 <- ( Choice1 * exp(V1.class2) + Choice2 * exp(V2.class2) + Choice3 * exp(V3.class2) ) / ( exp(V1.class2) + exp(V2.class2) + exp(V3.class2) )
-
+     
      # aggregate() is very slow. This likelihood function could be sped up by
      # using something like data.table for the class probability aggregation by ID (not shown here)
      P.class1 <- aggregate(P.class1, by = list(ID), prod)[, 2]
      P.class2 <- aggregate(P.class2, by = list(ID), prod)[, 2]
-     
+          
      # Class membership - could be a function of additional socio-demographic variables (not shown here)
      # and not just the constant delta2
      P.membership1 <- 1/(1 + exp(delta2))
      P.membership2 <- exp(delta2)/(1 + exp(delta2))
-     
+          
      P <- P.class1 * P.membership1 + P.class2 * P.membership2
      
      P <- P[ID]^(1/9)
