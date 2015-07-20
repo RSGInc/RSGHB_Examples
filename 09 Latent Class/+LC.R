@@ -71,7 +71,6 @@ control <- list(
 
 likelihood <- function(fc,b) {
      
-     #Random Coefficients 
      cc <- 1 
      delta2              <- fc[cc]; cc <- cc + 1
      BBrand_2_class1     <- fc[cc]; cc <- cc + 1
